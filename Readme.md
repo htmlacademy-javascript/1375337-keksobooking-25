@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Валентина Ломаева](https://up.htmlacademy.ru/javascript/25/user/1375337).
-* Наставник: `Неизвестно`.
+* Наставник: [Алексей Хабиров](https://htmlacademy.ru/profile/alex_khab).
 
 ---
 
