@@ -119,7 +119,6 @@ const createAdvertisementObj  = () => ({
   location: createLocationObj()
 });
 
-const randomAdvertisements = Array.from({length: ADVERTISMENTS_NUMBER}, createAdvertisementObj);
+const getAdvertisements = () => Array.from({length: ADVERTISMENTS_NUMBER}, createAdvertisementObj);
 
-console.log (randomAdvertisements);
-
+getAdvertisements();
