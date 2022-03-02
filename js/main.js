@@ -3,6 +3,7 @@ const TITLE = [
   'Desert Quail Inn',
   'Villas at Poco Diablo'
 ];
+
 const TYPE_ACCOMMODATION = [
   'palace',
   'flat',
@@ -10,11 +11,13 @@ const TYPE_ACCOMMODATION = [
   'bungalow',
   'hotel'
 ];
-const TIME_CHECKIN_CHECOUT = [
+
+const TIME_CHKIN_CHKOUT = [
   '12:00',
   '13:00',
   '14:00'
 ];
+
 const FEATURES = [
   'wifi',
   'dishwasher',
@@ -23,16 +26,19 @@ const FEATURES = [
   'elevator',
   'conditioner'
 ];
+
 const DESCRIPTION = [
   'Great location',
   'Cozy and sweet',
   'modern design'
 ];
+
 const PHOTO_URLS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
+
 const LAT_MIN = 35.65000;
 const LAT_MAX = 35.70000;
 const LNG_MIN = 139.70000;
@@ -44,7 +50,7 @@ const ROOMS_MIN = 1;
 const ROOMS_MAX = 5;
 const GUESTS_MIN = 1;
 const GUESTS_MAX = 10;
-const ADVERTISMENTS_NUMBER = 10;
+const ADS_NUMBER = 10;
 
 const getRandomNumber = (min, max) => {
   if (min < max && min >= 0) {
@@ -64,61 +70,60 @@ const getRandomFloatNumber = (min, max, floatNumber) => {
 
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
-const getLengthNumber = (number) => number.toString().length;
+const shuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  return array;
+};
 
 const getArray = (arrayInput) => {
   const arrayLength = getRandomNumber(1, arrayInput.length);
-  const arrayOutput = [];
-  for (let i = 0; i < arrayLength; i++) {
-    const elementIndex = getRandomNumber(0, arrayInput.length - 1);
-    const arrayElement = arrayInput[elementIndex];
-    if (!arrayOutput.includes(arrayElement)) {
-      arrayOutput.push(arrayElement);
-    }
-  }
+  const arrayOutput = shuffle(arrayInput);
 
-  return arrayOutput;
+  return arrayOutput.slice(0, arrayLength);
 };
 
-let avatarNumber = 0;
-const createAvatarNumber = (nextAvatarNumber) => {
-  avatarNumber++ ;
-  nextAvatarNumber++ ;
-  if (getLengthNumber(nextAvatarNumber) < 2) {
+const getlocationOfAd = () => {
+  const locationOfAd = {
+    lat: getRandomFloatNumber(LAT_MIN, LAT_MAX, FLOAT_NUMBER),
+    lng: getRandomFloatNumber(LNG_MIN, LNG_MAX, FLOAT_NUMBER)
+  };
 
-    return `0${  avatarNumber}`;}
-
-  return avatarNumber;
+  return locationOfAd;
 };
 
-const createAuthorObj  = () => ({
-  avatar: `img/avatars/user${  createAvatarNumber(avatarNumber)  }.png`
-});
-
-const createOfferObj  = () => ({
+const createOffer  = (lat, lng) => ({
   title: getRandomArrayElement(TITLE),
-  address: `${getRandomFloatNumber(LAT_MIN, LAT_MAX, FLOAT_NUMBER)  }, ${  getRandomFloatNumber(LNG_MIN, LNG_MAX, FLOAT_NUMBER)}`,
+  address: `${lat}, ${lng}`,
   price: getRandomNumber(PRICE_MIN, PRICE_MAX),
   type: getRandomArrayElement(TYPE_ACCOMMODATION),
   rooms: getRandomNumber(ROOMS_MIN, ROOMS_MAX),
   guests: getRandomNumber(GUESTS_MIN, GUESTS_MAX),
-  checkin: getRandomArrayElement(TIME_CHECKIN_CHECOUT),
-  checkout: getRandomArrayElement(TIME_CHECKIN_CHECOUT),
+  checkin: getRandomArrayElement(TIME_CHKIN_CHKOUT),
+  checkout: getRandomArrayElement(TIME_CHKIN_CHKOUT),
   features: getArray(FEATURES),
   description: getRandomArrayElement(DESCRIPTION),
   photos: getArray(PHOTO_URLS),
 });
 
-const createLocationObj  = () => ({
-  address: `${getRandomFloatNumber(LAT_MIN, LAT_MAX, FLOAT_NUMBER)  }, ${  getRandomFloatNumber(LNG_MIN, LNG_MAX, FLOAT_NUMBER)}`,
-});
+const createAd  = (index) => {
+  const locationOfAd = getlocationOfAd();
 
-const createAdvertisementObj  = () => ({
-  author: createAuthorObj(),
-  offer: createOfferObj(),
-  location: createLocationObj()
-});
+  const Ad = {
+    author: {
+      avatar: `img/avatars/user${index.toString().padStart(2, '0')}.png`
+    },
+    offer: createOffer(locationOfAd.lat, locationOfAd.lng),
+    locationOfAd
+  };
 
-const getAdvertisements = () => Array.from({length: ADVERTISMENTS_NUMBER}, createAdvertisementObj);
+  return Ad;
+};
 
-getAdvertisements();
+const getAds = () => Array.from({ length: ADS_NUMBER }, (_, idx) => createAd(idx + 1));
+
+const ads = getAds();
+window.console.log({ads});
