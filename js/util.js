@@ -26,10 +26,10 @@ const shuffle = (array) => {
 };
 
 const getShuffleArraySlice = (arrayInput) => {
-  const arrayLength = getRandomNumber(1, arrayInput.length);
+  const arrayLength = getRandomNumber(0, arrayInput.length);
   const arrayOutput = shuffle(arrayInput);
 
-  return arrayOutput.slice(0, arrayLength);
+  return arrayOutput.slice(arrayLength);
 };
 
 export {getRandomNumber, getRandomFloatNumber, getShuffleArraySlice, getRandomArrayElement};
