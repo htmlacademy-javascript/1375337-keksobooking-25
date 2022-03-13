@@ -1,7 +1,9 @@
 import {getAds} from'./data.js';
-import {getPopupAd} from './load-ads.js';
+import {renderPopupAd} from './card.js';
+
+const mapCanvas = document.querySelector('#map-canvas');
 
 const ads = getAds();
-window.console.log({ads});
+const card = renderPopupAd(ads[0]);
 
-getPopupAd(1);
+mapCanvas.appendChild(card);
