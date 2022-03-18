@@ -1,4 +1,6 @@
-//Загрузка на карту схожих объявлений
+//Формирование схожего объявления
+import {getDeclination} from './util.js';
+
 const TYPE_ACCOMMODATION_RUS = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -8,18 +10,13 @@ const TYPE_ACCOMMODATION_RUS = {
 };
 
 const WORD_FORMS = {
-  room:[' комната', ' комнаты', ' комнат'],
-  guest:[' гостя', ' гостей', ' гостей']
+  room: [' комната', ' комнаты', ' комнат'],
+  guest: [' гостя', ' гостей', ' гостей']
 };
 
 const template = document.querySelector('#card')
   .content
   .querySelector('.popup');
-
-const declOfNum = (num, word) => {
-  const cases = [2, 0, 1, 1, 1, 2];
-  return num + word[ (num%100 > 4 && num%100 < 20)? 2 : cases[(num%10 < 5)?num%10 : 5] ];
-};
 
 const fillFeatures = (featuresList, features) => {
   featuresList.innerHTML = '';
@@ -34,7 +31,7 @@ const fillPhotos = (photosList, photos) => {
   photosList.innerHTML = '';
 
   photos.forEach ( (photo) => {
-    const img = `<img src="${photo}" class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>`;
+    const img = `<img src="${photo}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`;
     photosList.insertAdjacentHTML('beforeend', img);
   });
 };
@@ -65,11 +62,26 @@ const renderPopupAd = (ad) => {
   card.querySelector('.popup__text--address').textContent = address;
   card.querySelector('.popup__text--price').textContent = `${price} ₽/ночь`;
   card.querySelector('.popup__type').textContent = TYPE_ACCOMMODATION_RUS[type];
-  card.querySelector('.popup__text--capacity').textContent = `${declOfNum(rooms, WORD_FORMS.room)} для ${declOfNum(guests, WORD_FORMS.guest)}`;
+  card.querySelector('.popup__text--capacity').textContent = `${getDeclination(rooms, WORD_FORMS.room)} для ${getDeclination(guests, WORD_FORMS.guest)}`;
   card.querySelector('.popup__text--time').textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
-  if (description.length > 0) {cardDescription.textContent = description;} else {cardDescription.remove();}
-  if (features.length > 0) {fillFeatures(featuresList, features);} else {featuresList.remove();}
-  if (photos.length > 0) {fillPhotos(photosList, photos);} else {photosList.remove();}
+
+  if (description.length > 0) {
+    cardDescription.textContent = description;
+  } else {
+    cardDescription.remove();
+  }
+
+  if (features.length > 0) {
+    fillFeatures(featuresList, features);
+  } else {
+    featuresList.remove();
+  }
+
+  if (photos.length > 0) {
+    fillPhotos(photosList, photos);
+  } else {
+    photosList.remove();
+  }
 
   return card;
 };

@@ -32,4 +32,9 @@ const getShuffleArraySlice = (arrayInput) => {
   return arrayOutput.slice(arrayLength);
 };
 
-export {getRandomNumber, getRandomFloatNumber, getShuffleArraySlice, getRandomArrayElement};
+const getDeclination = (num, word) => {
+  const cases = [2, 0, 1, 1, 1, 2];
+  return num + word[(num % 100 > 4 && num % 100 < 20) ? 2 : cases[(num % 10 < 5) ? num % 10 : 5]];
+};
+
+export {getRandomNumber, getRandomFloatNumber, getShuffleArraySlice, getRandomArrayElement, getDeclination};
