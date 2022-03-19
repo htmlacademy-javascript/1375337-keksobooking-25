@@ -1,24 +1,32 @@
-const activityFormToggle = (formClass) => {
+const toggleElements = (form, state) => {
+  Array.from(form.children).forEach((child) => {
+    child.disabled = state;
+  });
+};
+
+
+const deactivateForm = (formClass) => {
   const form = document.querySelector(`.${formClass}`);
 
-  if (form.classList.contains(`${formClass}--disabled`)) {
-    form.classList.remove(`${formClass}--disabled`);
-
-    Array.from(form.children).forEach((child) => {
-      child.removeAttribute('disabled');
-    });
-  } else {
-    form.classList.add(`${formClass}--disabled`);
-
-    Array.from(form.children).forEach((child) => {
-      child.setAttribute('disabled', 'true');
-    });
-  }
+  form.classList.add(`${formClass}--disabled`);
+  toggleElements(form, true);
 };
 
-const activityToggle = () => {
-  activityFormToggle('ad-form');
-  activityFormToggle('map__filters');
+const activateForm = (formClass) => {
+  const form = document.querySelector(`.${formClass}`);
+
+  form.classList.remove(`${formClass}--disabled`);
+  toggleElements(form, false);
 };
 
-export {activityToggle};
+const deactivatePage = () => {
+  deactivateForm('ad-form');
+  deactivateForm('map__filters');
+};
+
+const activatePage = () => {
+  activateForm('ad-form');
+  activateForm('map__filters');
+};
+
+export {deactivatePage, activatePage};
