@@ -1,33 +1,24 @@
-const deactivateForm = (formClass) => {
+const activityFormToggle = (formClass) => {
   const form = document.querySelector(`.${formClass}`);
-  const formChildren = Object.values(form.children);
 
-  form.classList.add(`${formClass}--disabled`);
+  if (form.classList.contains(`${formClass}--disabled`)) {
+    form.classList.remove(`${formClass}--disabled`);
 
-  formChildren.forEach((child) => {
-    child.classList.add('disabled');
-  });
+    Array.from(form.children).forEach((child) => {
+      child.removeAttribute('disabled');
+    });
+  } else {
+    form.classList.add(`${formClass}--disabled`);
+
+    Array.from(form.children).forEach((child) => {
+      child.setAttribute('disabled', 'true');
+    });
+  }
 };
 
-const activateForm = (formClass) => {
-  const form = document.querySelector(`.${formClass}`);
-  const formChildren = Object.values(form.children);
-
-  form.classList.remove(`${formClass}--disabled`);
-
-  formChildren.forEach((child) => {
-    child.classList.remove('disabled');
-  });
+const activityToggle = () => {
+  activityFormToggle('ad-form');
+  activityFormToggle('map__filters');
 };
 
-const deactivatePage = () => {
-  deactivateForm('ad-form');
-  deactivateForm('map__filters');
-};
-
-const activatePage = () => {
-  activateForm('ad-form');
-  activateForm('map__filters');
-};
-
-export {deactivatePage, activatePage};
+export {activityToggle};
