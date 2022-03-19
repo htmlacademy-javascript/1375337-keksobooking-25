@@ -1,23 +1,22 @@
+const toggleElements = (form, state) => {
+  Array.from(form.children).forEach((child) => {
+    child.disabled = state;
+  });
+};
+
+
 const deactivateForm = (formClass) => {
   const form = document.querySelector(`.${formClass}`);
-  const formChildren = Object.values(form.children);
 
   form.classList.add(`${formClass}--disabled`);
-
-  formChildren.forEach((child) => {
-    child.classList.add('disabled');
-  });
+  toggleElements(form, true);
 };
 
 const activateForm = (formClass) => {
   const form = document.querySelector(`.${formClass}`);
-  const formChildren = Object.values(form.children);
 
   form.classList.remove(`${formClass}--disabled`);
-
-  formChildren.forEach((child) => {
-    child.classList.remove('disabled');
-  });
+  toggleElements(form, false);
 };
 
 const deactivatePage = () => {
