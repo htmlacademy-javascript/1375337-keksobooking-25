@@ -14,7 +14,7 @@ const adFormElements = {
   price: adForm.querySelector('#price'),
   rooms: adForm.querySelector('#room_number'),
   capacity: adForm.querySelector('#capacity'),
-  timein: adForm.querySelector('timein'),
+  timein: adForm.querySelector('#timein'),
   timeout: adForm.querySelector('#timeout')
 };
 

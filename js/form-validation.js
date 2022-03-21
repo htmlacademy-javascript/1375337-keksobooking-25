@@ -40,21 +40,19 @@ const validateAdForm = (elms) => {
     return `Цена: от ${TYPE_MIN_PRICE[selectedType.value]} до 100 000`;
   };
 
-  // function changeMinPrice () {
-  //   const selectedType = elms.type.querySelector('option:checked');
-  //   elms.price.placeholder = TYPE_MIN_PRICE[selectedType.value];
-  //   window.console.log(elms.price.placeholder );
-  // }
-
-  // elms.type
-  //   .querySelectorAll('option')
-  //   .forEach((item) => item.addEventListener('change', changeMinPrice));
-
   pristine.addValidator(
     elms.price,
     validatePrice,
     getPriceErrorMessage
   );
+
+  //Изменение мин. цены в зависимости от типа жилья
+  const changeMinPrice = () => {
+    const selectedType = elms.type.querySelector('option:checked');
+    elms.price.placeholder = TYPE_MIN_PRICE[selectedType.value];
+  };
+
+  elms.type.addEventListener('change', changeMinPrice);
 
   // Валидация Комнат и гостей
   const validateRoomsAndCapacity = () => {
@@ -78,6 +76,28 @@ const validateAdForm = (elms) => {
     'Гостей должно быть <= комнат'
   );
 
+  // Валидация времени Заезда/выезда
+  const changeTime = (timeArSelected, timeArToChange) => {
+    const selectedTime = timeArSelected.querySelector('option:checked');
+
+    for (let i = 0; i < timeArToChange.length; i++) {
+      if (timeArToChange[i].value === selectedTime.value) {
+        timeArToChange[i].selected = true;
+      }
+    }
+  };
+
+  const changeTimeIn = () => {
+    changeTime(elms.timeout, elms.timein);
+  };
+
+  const changeTimeOut = () => {
+    changeTime(elms.timein, elms.timeout);
+  };
+
+  elms.timeout.addEventListener('change', changeTimeIn);
+
+  elms.timein.addEventListener('change', changeTimeOut);
 
   // Обработчики
   elms.form.addEventListener('change', (evt) => {
