@@ -1,3 +1,4 @@
+// Активная/неактивная страница
 const toggleElements = (form, state) => {
   Array.from(form.children).forEach((child) => {
     child.disabled = state;
