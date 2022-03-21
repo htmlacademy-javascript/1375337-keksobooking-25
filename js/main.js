@@ -10,9 +10,12 @@ const adForm = document.querySelector('.ad-form');
 const adFormElements = {
   form: adForm,
   title: adForm.querySelector('#title'),
+  type: adForm.querySelector('#type'),
   price: adForm.querySelector('#price'),
   rooms: adForm.querySelector('#room_number'),
-  capacity: adForm.querySelector('#capacity')
+  capacity: adForm.querySelector('#capacity'),
+  timein: adForm.querySelector('timein'),
+  timeout: adForm.querySelector('#timeout')
 };
 
 const card = renderPopupAd(ads[0]);
