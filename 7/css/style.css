@@ -1034,3 +1034,8 @@ fieldset {
   color: red;
   line-height: 0px;
 }
+
+.form__item--invalid input,
+.form__item--invalid select {
+  border-color: red;
+}
