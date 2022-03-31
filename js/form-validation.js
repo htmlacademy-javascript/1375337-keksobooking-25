@@ -1,3 +1,6 @@
+//Валидация полей формы
+import {priceSlider} from './form.js';
+
 const TYPE_MIN_PRICE = {
   flat: 1000,
   bungalow: 0,
@@ -11,6 +14,13 @@ const MAX_PRICE = 100000;
 const TITLE_SYMBOLS = {
   min: 30,
   max: 100
+};
+
+const CAPACITY_ROOMS = {
+  '1': ['1'],
+  '2': ['1','2'],
+  '3': ['1','2','3'],
+  '100': ['0']
 };
 
 const adForm = document.querySelector('.ad-form');
@@ -31,33 +41,29 @@ const createPristineInstance = () => new Pristine(adForm, {
   errorTextClass: 'form__error',
 });
 
-//Валидация заголовка
+//--Валидация заголовка
 const validateTitle = (value) => value.length >= TITLE_SYMBOLS.min && value.length <= TITLE_SYMBOLS.max;
-const getTitleErrorMessage = () => `Текст длиной от ${TITLE_SYMBOLS.min} до ${TITLE_SYMBOLS.max} символов. Вы ввели ${title.value.length}.`;
+const getTitleErrorMessage = () => `Вы ввели ${title.value.length}.`;
 
-//Валидация цены
+//--Валидация цены
 const validatePrice = (value) => Number.isInteger(Number(value)) && value >= TYPE_MIN_PRICE[type.value] && value <= MAX_PRICE;
 const getPriceErrorMessage = () => `Цена: от ${TYPE_MIN_PRICE[type.value]} до ${MAX_PRICE}`;
 
-// Валидация времени Заезда/выезда
-const changeTime = (timeSelected, timeArToChange) =>
-  Array.from(timeArToChange).forEach((element) => element.value === timeSelected ? (element.selected = true) : false);
-const onTimeinChange = (evt) => changeTime(evt.target.value, timein);
-const onTimeoutChange = (evt) => changeTime(evt.target.value, timeout);
+//--Валидация времени Заезда/выезда
+const onTimeinChange = (evt) => {
+  timein.value = evt.target.value;
+};
 
-//Изменение мин. цены в зависимости от типа жилья
+const onTimeoutChange = (evt) => {
+  timeout.value = evt.target.value;
+};
+
+//--Изменение мин. цены в зависимости от типа жилья
 const onPriceChange = (evt) => (price.placeholder = TYPE_MIN_PRICE[evt.target.value]);
 
 
-// Валидация Комнат и гостей
-const validateRoomsAndCapacity = () => {
-  const roomsCount = parseInt(rooms.value, 10);
-  const capacityCount = parseInt(capacity.value, 10);
-
-  return roomsCount === 100
-    ? capacityCount === 0
-    : capacityCount > 0 && roomsCount >= capacityCount;
-};
+//--Валидация Комнат и гостей
+const validateRoomsAndCapacity = () => CAPACITY_ROOMS[rooms.value].includes(capacity.value);
 
 const onFormSubmit = (evt, pristine) => {
   evt.preventDefault();
@@ -69,35 +75,43 @@ const onFormChange = (evt, pristine) => {
   pristine.validate();
 };
 
-// Добавляет Валидаторы
+//--Добавляет Валидаторы
 const addValidators = (pristine) => {
   pristine.addValidator(
     title,
     validateTitle,
-    getTitleErrorMessage
+    getTitleErrorMessage,
+    2,
+    true
   );
 
   pristine.addValidator(
     price,
     validatePrice,
-    getPriceErrorMessage
+    getPriceErrorMessage,
+    2,
+    true
   );
 
   pristine.addValidator(
     rooms,
     validateRoomsAndCapacity,
-    'Комнат должно быть >= гостей. 100 комнат - "не для гостей"'
+    'Комнат должно быть >= гостей. 100 комнат - "не для гостей"',
+    2,
+    true
   );
 
   pristine.addValidator(
     capacity,
     validateRoomsAndCapacity,
-    'Гостей должно быть <= комнат'
+    'Гостей должно быть <= комнат',
+    2,
+    true
   );
 
 };
 
-//Запускает обработчики
+//--Запускает обработчики
 const setFormListeners = () => {
   const pristine = createPristineInstance();
 
@@ -107,6 +121,8 @@ const setFormListeners = () => {
 
   adForm.addEventListener('submit', (evt) => onFormSubmit(evt, pristine));
   adForm.addEventListener('change', (evt) => onFormChange(evt, pristine));
+
+  priceSlider.noUiSlider.on('update', () => pristine.validate(price));
 
   addValidators(pristine);
 };

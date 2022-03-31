@@ -1,33 +1,28 @@
-// Активная/неактивная страница
-const toggleElements = (form, state) => {
-  Array.from(form.children).forEach((child) => {
-    child.disabled = state;
-  });
+const adForm = document.querySelector('.ad-form');
+const address = adForm.querySelector('#address');
+const price = adForm.querySelector('#price');
+const priceSlider = adForm.querySelector('.ad-form__slider');
+
+//Автозаполнение координат
+const setAddress = (value) => {
+  address.value = value;
 };
 
+//Слайдер для поля цены
+noUiSlider.create(priceSlider, {
+  range: {
+    min: 0,
+    max: 100000,
+  },
+  start: 1000,
+  step: 1000,
+  connect: 'lower',
+});
 
-const deactivateForm = (formClass) => {
-  const form = document.querySelector(`.${formClass}`);
+priceSlider.noUiSlider.on('update', () => {
+  price.value = Math.trunc(priceSlider.noUiSlider.get());
+});
 
-  form.classList.add(`${formClass}--disabled`);
-  toggleElements(form, true);
-};
+price.addEventListener ('change', (evt) => priceSlider.noUiSlider.set(evt.target.value));
 
-const activateForm = (formClass) => {
-  const form = document.querySelector(`.${formClass}`);
-
-  form.classList.remove(`${formClass}--disabled`);
-  toggleElements(form, false);
-};
-
-const deactivatePage = () => {
-  deactivateForm('ad-form');
-  deactivateForm('map__filters');
-};
-
-const activatePage = () => {
-  activateForm('ad-form');
-  activateForm('map__filters');
-};
-
-export {deactivatePage, activatePage};
+export {setAddress, priceSlider};
