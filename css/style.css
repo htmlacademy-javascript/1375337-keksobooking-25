@@ -1053,3 +1053,14 @@ fieldset {
 .hidden {
   display: none;
 }
+
+/* Стилизация сообщений об ошибке */
+.form__error {
+  color: red;
+  line-height: 0px;
+}
+
+.form__item--invalid input,
+.form__item--invalid select {
+  border-color: red;
+}
