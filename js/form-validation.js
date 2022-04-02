@@ -1,5 +1,5 @@
 //Валидация полей формы
-import {priceSlider} from './form.js';
+import {initSlider} from './form.js';
 
 const TYPE_MIN_PRICE = {
   flat: 1000,
@@ -41,15 +41,15 @@ const createPristineInstance = () => new Pristine(adForm, {
   errorTextClass: 'form__error',
 });
 
-//--Валидация заголовка
+
 const validateTitle = (value) => value.length >= TITLE_SYMBOLS.min && value.length <= TITLE_SYMBOLS.max;
 const getTitleErrorMessage = () => `Вы ввели ${title.value.length}.`;
 
-//--Валидация цены
+
 const validatePrice = (value) => Number.isInteger(Number(value)) && value >= TYPE_MIN_PRICE[type.value] && value <= MAX_PRICE;
 const getPriceErrorMessage = () => `Цена: от ${TYPE_MIN_PRICE[type.value]} до ${MAX_PRICE}`;
 
-//--Валидация времени Заезда/выезда
+
 const onTimeinChange = (evt) => {
   timein.value = evt.target.value;
 };
@@ -58,11 +58,9 @@ const onTimeoutChange = (evt) => {
   timeout.value = evt.target.value;
 };
 
-//--Изменение мин. цены в зависимости от типа жилья
 const onPriceChange = (evt) => (price.placeholder = TYPE_MIN_PRICE[evt.target.value]);
 
 
-//--Валидация Комнат и гостей
 const validateRoomsAndCapacity = () => CAPACITY_ROOMS[rooms.value].includes(capacity.value);
 
 const onFormSubmit = (evt, pristine) => {
@@ -75,7 +73,7 @@ const onFormChange = (evt, pristine) => {
   pristine.validate();
 };
 
-//--Добавляет Валидаторы
+
 const addValidators = (pristine) => {
   pristine.addValidator(
     title,
@@ -111,7 +109,7 @@ const addValidators = (pristine) => {
 
 };
 
-//--Запускает обработчики
+
 const setFormListeners = () => {
   const pristine = createPristineInstance();
 
@@ -122,9 +120,8 @@ const setFormListeners = () => {
   adForm.addEventListener('submit', (evt) => onFormSubmit(evt, pristine));
   adForm.addEventListener('change', (evt) => onFormChange(evt, pristine));
 
-  priceSlider.noUiSlider.on('update', () => pristine.validate(price));
-
   addValidators(pristine);
+  initSlider(() => pristine.validate(price));
 };
 
 export {setFormListeners};

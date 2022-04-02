@@ -24,9 +24,12 @@ const deactivatePage = () => {
   deactivateForm('map__filters');
 };
 
-const activatePage = () => {
+const activateAdForm = () => {
   activateForm('ad-form');
+};
+
+const activateFilters = () => {
   activateForm('map__filters');
 };
 
-export {deactivatePage, activatePage};
+export {deactivatePage, activateAdForm, activateFilters};

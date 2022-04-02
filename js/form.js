@@ -3,26 +3,38 @@ const address = adForm.querySelector('#address');
 const price = adForm.querySelector('#price');
 const priceSlider = adForm.querySelector('.ad-form__slider');
 
-//Автозаполнение координат
+const PRICE_SLIDER_OPTIONS = {
+  min: 0,
+  max: 100000,
+  start: 1000,
+  step: 1000,
+  connect: 'lower'
+};
+
 const setAddress = (value) => {
   address.value = value;
 };
 
-//Слайдер для поля цены
-noUiSlider.create(priceSlider, {
+const createSlider = (options) => noUiSlider.create(priceSlider, {
   range: {
-    min: 0,
-    max: 100000,
+    min: options.min,
+    max: options.max,
   },
-  start: 1000,
-  step: 1000,
-  connect: 'lower',
+  start: options.start,
+  step: options.step,
+  connect: options.connect,
 });
 
-priceSlider.noUiSlider.on('update', () => {
-  price.value = Math.trunc(priceSlider.noUiSlider.get());
-});
+createSlider(PRICE_SLIDER_OPTIONS);
 
-price.addEventListener ('change', (evt) => priceSlider.noUiSlider.set(evt.target.value));
+const initSlider = (validateValue) => {
+  priceSlider.noUiSlider.on('update', () => {
+    price.value = Math.round(priceSlider.noUiSlider.get());
+    validateValue();
+  });
 
-export {setAddress, priceSlider};
+  price.addEventListener ('change', (evt) => priceSlider.noUiSlider.set(evt.target.value));
+};
+
+
+export {setAddress, initSlider};
