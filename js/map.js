@@ -1,10 +1,7 @@
 import {setAddress} from './form.js';
 import {renderPopupAd} from './card.js';
 import {activateAdForm, activateFilters} from './page-activation.js';
-import {getAds} from'./data.js';
-
-
-const ads = getAds();
+import {getAds} from'./api.js';
 
 const COORDINATORS_CENTER_TOKYO = {
   lat: 35.6833,
@@ -74,7 +71,7 @@ const initMap = () => {
   setAddress(`${COORDINATORS_CENTER_TOKYO.lat}, ${COORDINATORS_CENTER_TOKYO.lng}`);
 
   //--Добавляет схожие объявления на карту
-  renderMarkers(ads);
+  getAds(renderMarkers);
 };
 
 export {initMap};

@@ -33,6 +33,11 @@ const initSlider = (validateValue) => {
     validateValue();
   });
 
+  priceSlider.noUiSlider.on('reset', () => {
+    price.value = Math.round(priceSlider.noUiSlider.get());
+    validateValue();
+  });
+
   price.addEventListener ('change', (evt) => priceSlider.noUiSlider.set(evt.target.value));
 };
 
