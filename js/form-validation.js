@@ -1,5 +1,7 @@
 //Валидация полей формы
-import {initSlider} from './form.js';
+import {initSlider, formReset} from './form.js';
+import {sendAd} from './api.js';
+import {showSuccessMessage, showErrorMessage} from './popups.js';
 
 const TYPE_MIN_PRICE = {
   flat: 1000,
@@ -43,7 +45,7 @@ const createPristineInstance = () => new Pristine(adForm, {
 
 
 const validateTitle = (value) => value.length >= TITLE_SYMBOLS.min && value.length <= TITLE_SYMBOLS.max;
-const getTitleErrorMessage = () => `Вы ввели ${title.value.length}.`;
+const getTitleErrorMessage = () => `От ${TITLE_SYMBOLS.min} до ${TITLE_SYMBOLS.max} символов. Вы ввели ${title.value.length}.`;
 
 
 const validatePrice = (value) => Number.isInteger(Number(value)) && value >= TYPE_MIN_PRICE[type.value] && value <= MAX_PRICE;
@@ -65,7 +67,16 @@ const validateRoomsAndCapacity = () => CAPACITY_ROOMS[rooms.value].includes(capa
 
 const onFormSubmit = (evt, pristine) => {
   evt.preventDefault();
-  pristine.validate();
+  const isValid = pristine.validate();
+
+  if (isValid) {
+    const showSuccess = () => {
+      showSuccessMessage();
+      formReset(adForm);
+    };
+
+    sendAd(new FormData(evt.target), showSuccess, showErrorMessage);
+  }
 };
 
 const onFormChange = (evt, pristine) => {

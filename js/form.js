@@ -1,3 +1,5 @@
+import {setPinMarker} from './map.js';
+
 const adForm = document.querySelector('.ad-form');
 const address = adForm.querySelector('#address');
 const price = adForm.querySelector('#price');
@@ -36,5 +38,11 @@ const initSlider = (validateValue) => {
   price.addEventListener ('change', (evt) => priceSlider.noUiSlider.set(evt.target.value));
 };
 
+const formReset = (form) => {
+  form.reset();
+  price.value = PRICE_SLIDER_OPTIONS.start;
+  setPinMarker();
+};
 
-export {setAddress, initSlider};
+
+export {setAddress, initSlider, formReset};
