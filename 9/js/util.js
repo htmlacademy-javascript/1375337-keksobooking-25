@@ -1,9 +1,12 @@
 const ALERT_SHOW_TIME = 5000;
+const ESC_ALL_BROWSERS = 'Escape';
 
 const getDeclination = (num, word) => {
   const cases = [2, 0, 1, 1, 1, 2];
   return num + word[(num % 100 > 4 && num % 100 < 20) ? 2 : cases[(num % 10 < 5) ? num % 10 : 5]];
 };
+
+const isEscEvent = (evt) => evt.key === ESC_ALL_BROWSERS;
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
@@ -26,4 +29,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getDeclination, showAlert};
+export {getDeclination, showAlert, isEscEvent};

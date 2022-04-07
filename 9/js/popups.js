@@ -1,37 +1,35 @@
-const successMessage = document.querySelector('#success').content.children[0];
-const errorMessage = document.querySelector('#error').content.children[0];
+import {isEscEvent} from './util.js';
 
-const onSuccessMessageAction = (evt) => {
-  if (evt.key === 'Escape' || evt.type === 'click') {
-    successMessage.remove();
+const successMessage = document.querySelector('#success')
+  .content
+  .querySelector('.success');
 
-    document.removeEventListener('click', onSuccessMessageAction);
-    document.removeEventListener('keydown', onSuccessMessageAction);
-  }
+const errorMessage = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+
+const showPopup = (message) => {
+  const tmpl = message.cloneNode(true);
+  document.body.insertAdjacentElement('beforeend', tmpl);
+
+  const onMessageKeydown = (evt) => {
+    if (isEscEvent(evt)) {
+      tmpl.remove();
+      document.removeEventListener('keydown', onMessageKeydown);
+    }
+  };
+
+  tmpl.addEventListener('click', () => {
+    tmpl.remove();
+    document.removeEventListener('keydown', onMessageKeydown);
+  });
+
+  document.addEventListener('keydown',onMessageKeydown);
 };
 
-const showSuccessMessage = () => {
-  document.body.insertAdjacentElement('beforeend', successMessage);
+const showErrorMessage = () => showPopup(errorMessage);
 
-  document.addEventListener('click', onSuccessMessageAction);
-  document.addEventListener('keydown', onSuccessMessageAction);
-};
-
-const onErrorMessageAction = (evt) => {
-  if (evt.key === 'Escape' || evt.type === 'click') {
-    errorMessage.remove();
-
-    document.removeEventListener('click', onErrorMessageAction);
-    document.removeEventListener('keydown', onErrorMessageAction);
-  }
-};
-
-const showErrorMessage = () => {
-  document.body.insertAdjacentElement('beforeend', errorMessage);
-
-  document.addEventListener('click', onErrorMessageAction);
-  document.addEventListener('keydown', onErrorMessageAction);
-};
+const showSuccessMessage = () => showPopup(successMessage);
 
 
 export {showSuccessMessage, showErrorMessage};

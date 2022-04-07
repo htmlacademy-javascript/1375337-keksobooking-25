@@ -1,35 +1,29 @@
-import {showAlert} from './util.js';
-import {showSuccessMessage, showErrorMessage} from './popups.js';
-
-const ADS_NUMBER = 10;
-const form = document.querySelector('.ad-form');
+const API_URL = 'https://25.javascript.pages.academy/keksobooking';
 
 
-const getAds = (onSuccess) => fetch('https://25.javascript.pages.academy/keksobooking/data')
+const getAds = (onSuccess, onFail) => fetch(`${API_URL}/data`)
   .then((response) => response.json())
   .then((data) => {
-    onSuccess(data.slice(0, ADS_NUMBER));
+    onSuccess(data);
   })
   .catch(() => {
-    showAlert('Не удалось загрузить похожие объявления. Обновите страницу');
+    onFail();
   });
 
-const sendAd = (formData) => fetch(
-  'https://25.javascript.pages.academy/keksobooking',
+const sendAd = (formData, onSuccess, onFail) => fetch(
+  API_URL,
   {
     method: 'POST',
     body: formData,
-  }
-)
+  })
   .then((response) => {
     if (response.ok) {
-      showSuccessMessage();
-      form.reset();
+      onSuccess();
     } else {
-      showErrorMessage();
+      onFail();
     }
   })
-  .catch(() => showErrorMessage());
+  .catch(() => onFail());
 
 
 export {getAds, sendAd};

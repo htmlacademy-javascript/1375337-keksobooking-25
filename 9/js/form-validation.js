@@ -1,6 +1,7 @@
 //Валидация полей формы
-import {initSlider} from './form.js';
-import {sendAd} from'./api.js';
+import {initSlider, formReset} from './form.js';
+import {sendAd} from './api.js';
+import {showSuccessMessage, showErrorMessage} from './popups.js';
 
 const TYPE_MIN_PRICE = {
   flat: 1000,
@@ -69,7 +70,12 @@ const onFormSubmit = (evt, pristine) => {
   const isValid = pristine.validate();
 
   if (isValid) {
-    sendAd(new FormData(evt.target));
+    const showSuccess = () => {
+      showSuccessMessage();
+      formReset(adForm);
+    };
+
+    sendAd(new FormData(evt.target), showSuccess, showErrorMessage);
   }
 };
 

@@ -1,7 +1,7 @@
 import {setAddress} from './form.js';
 import {renderPopupAd} from './card.js';
-import {activateAdForm, activateFilters} from './page-activation.js';
-import {getAds} from'./api.js';
+import {activateAdForm} from './page-activation.js';
+
 
 const COORDINATORS_CENTER_TOKYO = {
   lat: 35.6833,
@@ -45,8 +45,6 @@ const renderMarkers = (pins) => {
       .addTo(markerGroop)
       .bindPopup(renderPopupAd(ad));
   });
-
-  activateFilters();
 };
 
 const onMarkerMove = (evt) => {
@@ -54,8 +52,18 @@ const onMarkerMove = (evt) => {
   setAddress(`${lat.toFixed(5)}, ${lng.toFixed(5)}`);
 };
 
-const initMap = () => {
-  map.on('load', activateAdForm)
+const setPinMarker = () => {
+  const mainPinMarker = createPinMarker();
+  mainPinMarker.addTo(map);
+  mainPinMarker.on('move', onMarkerMove);
+  setAddress(`${COORDINATORS_CENTER_TOKYO.lat}, ${COORDINATORS_CENTER_TOKYO.lng}`);
+};
+
+const initMap = (cb) => {
+  map.on('load', () => {
+    activateAdForm();
+    cb();
+  })
     .setView(COORDINATORS_CENTER_TOKYO, MAP_ZOOM);
 
   L.tileLayer(
@@ -65,13 +73,7 @@ const initMap = () => {
     },
   ).addTo(map);
 
-  const mainPinMarker = createPinMarker();
-  mainPinMarker.addTo(map);
-  mainPinMarker.on('move', onMarkerMove);
-  setAddress(`${COORDINATORS_CENTER_TOKYO.lat}, ${COORDINATORS_CENTER_TOKYO.lng}`);
-
-  //--Добавляет схожие объявления на карту
-  getAds(renderMarkers);
+  setPinMarker();
 };
 
-export {initMap};
+export {initMap, renderMarkers, setPinMarker};
