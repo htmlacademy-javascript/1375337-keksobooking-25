@@ -10,7 +10,7 @@ const RENDER_PINS_AMOUNT = 10;
 
 const COORDINATORS_CENTER_TOKYO = {
   lat: 35.6833,
-  lng: 139.6820
+  lng: 139.6821
 };
 
 const OPEN_MAP = {
