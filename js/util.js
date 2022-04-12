@@ -29,4 +29,14 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getDeclination, showAlert, isEscEvent};
+function debounce(callback, timeoutDelay = 500) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+
+export {getDeclination, showAlert, isEscEvent, debounce};

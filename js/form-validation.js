@@ -33,6 +33,7 @@ const rooms = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const timein = adForm.querySelector('#timein');
 const timeout = adForm.querySelector('#timeout');
+const formResetButton = adForm.querySelector('button[type="reset"]');
 
 const createPristineInstance = () => new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -72,7 +73,7 @@ const onFormSubmit = (evt, pristine) => {
   if (isValid) {
     const showSuccess = () => {
       showSuccessMessage();
-      formReset(adForm);
+      formReset();
     };
 
     sendAd(new FormData(evt.target), showSuccess, showErrorMessage);
@@ -130,6 +131,11 @@ const setFormListeners = () => {
 
   adForm.addEventListener('submit', (evt) => onFormSubmit(evt, pristine));
   adForm.addEventListener('change', (evt) => onFormChange(evt, pristine));
+  formResetButton.addEventListener ('click' , (evt) => {
+    evt.preventDefault();
+    formReset();
+    pristine.validate(title);
+  });
 
   addValidators(pristine);
   initSlider(() => pristine.validate(price));

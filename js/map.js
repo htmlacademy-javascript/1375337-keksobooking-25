@@ -2,13 +2,16 @@ import {setAddress} from './form.js';
 import {renderPopupAd} from './card.js';
 import {activateAdForm} from './page-activation.js';
 
+const MAIN_PIN_SIZE = 52;
+const PIN_SIZE = 40;
+const MAP_ZOOM = 10;
+
+const RENDER_PINS_AMOUNT = 10;
 
 const COORDINATORS_CENTER_TOKYO = {
   lat: 35.6833,
-  lng: 139.6820
+  lng: 139.6821
 };
-
-const MAP_ZOOM = 10;
 
 const OPEN_MAP = {
   picture:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -20,14 +23,14 @@ const markerGroop = L.layerGroup().addTo(map);
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: [MAIN_PIN_SIZE, MAIN_PIN_SIZE],
+  iconAnchor: [MAIN_PIN_SIZE / 2, MAIN_PIN_SIZE],
 });
 
 const pinIcon = L.icon({
   iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: [PIN_SIZE, PIN_SIZE],
+  iconAnchor: [PIN_SIZE / 2, PIN_SIZE],
 });
 
 const createPinMarker = () => L.marker(
@@ -39,8 +42,10 @@ const createPinMarker = () => L.marker(
 );
 
 const renderMarkers = (pins) => {
-  pins.forEach((ad) => {
-    const pinMarker = L.marker(ad.location, { pinIcon });
+  const renderPins = pins.slice(0, RENDER_PINS_AMOUNT);
+  markerGroop.clearLayers();
+  renderPins.forEach((ad) => {
+    const pinMarker = L.marker(ad.location, { icon: pinIcon });
     pinMarker
       .addTo(markerGroop)
       .bindPopup(renderPopupAd(ad));
@@ -52,10 +57,17 @@ const onMarkerMove = (evt) => {
   setAddress(`${lat.toFixed(5)}, ${lng.toFixed(5)}`);
 };
 
+const mainPinMarker = createPinMarker();
+
 const setPinMarker = () => {
-  const mainPinMarker = createPinMarker();
   mainPinMarker.addTo(map);
   mainPinMarker.on('move', onMarkerMove);
+  setAddress(`${COORDINATORS_CENTER_TOKYO.lat}, ${COORDINATORS_CENTER_TOKYO.lng}`);
+};
+
+const resetMap = () => {
+  map.setView(COORDINATORS_CENTER_TOKYO, MAP_ZOOM);
+  mainPinMarker.setLatLng(new L.LatLng(COORDINATORS_CENTER_TOKYO.lat, COORDINATORS_CENTER_TOKYO.lng));
   setAddress(`${COORDINATORS_CENTER_TOKYO.lat}, ${COORDINATORS_CENTER_TOKYO.lng}`);
 };
 
@@ -76,4 +88,4 @@ const initMap = (cb) => {
   setPinMarker();
 };
 
-export {initMap, renderMarkers, setPinMarker};
+export {initMap, renderMarkers, resetMap};
