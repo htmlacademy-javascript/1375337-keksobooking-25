@@ -3,13 +3,15 @@ import {setFormListeners} from './form-validation.js';
 import {initMap, renderMarkers} from './map.js';
 import {getAds} from'./api.js';
 import {showAlert} from'./util.js';
+import {setFiltersListeners} from './filters.js';
 
 const ERROR_MESSAGE = 'Не удалось загрузить похожие объявления. Обновите страницу';
 
 deactivatePage();
 
 const onLoadSuccess = (data) => {
-  renderMarkers(data.slice(0, 10));
+  renderMarkers(data);
+  setFiltersListeners(data);
   activateFilters();
 };
 
