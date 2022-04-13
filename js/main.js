@@ -4,6 +4,7 @@ import {initMap, renderMarkers} from './map.js';
 import {getAds} from'./api.js';
 import {showAlert} from'./util.js';
 import {setFiltersListeners} from './filters.js';
+import './pictures.js';
 
 const ERROR_MESSAGE = 'Не удалось загрузить похожие объявления. Обновите страницу';
 

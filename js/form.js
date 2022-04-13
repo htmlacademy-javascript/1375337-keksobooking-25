@@ -1,4 +1,5 @@
 import {resetMap} from './map.js';
+import {resetPictures} from './pictures.js';
 
 const adForm = document.querySelector('.ad-form');
 const filter = document.querySelector('.map__filters');
@@ -51,6 +52,7 @@ const formReset = () => {
   adForm.reset();
   priceReset();
   resetMap();
+  resetPictures();
 };
 
 export {setAddress, initSlider, formReset};
