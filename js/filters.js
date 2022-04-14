@@ -46,7 +46,6 @@ const checkFeaturesValue = ({ offer }) => {
 
 const filterAds = (ads, setPins) => {
   const filteredAds = ads
-    .slice()
     .filter((ad) => checkTypeValue(ad) &&
         checkRoomsValue(ad) &&
         checkGuestsValue(ad) &&

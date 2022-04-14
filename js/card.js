@@ -10,8 +10,8 @@ const TYPE_ACCOMMODATION_RUS = {
 };
 
 const WORD_FORMS = {
-  room: [' комната', ' комнаты', ' комнат'],
-  guest: [' гостя', ' гостей', ' гостей']
+  rooms: [' комната', ' комнаты', ' комнат'],
+  guests: [' гостя', ' гостей', ' гостей']
 };
 
 const template = document.querySelector('#card')
@@ -62,7 +62,7 @@ const renderPopupAd = (ad) => {
   card.querySelector('.popup__text--address').textContent = address;
   card.querySelector('.popup__text--price').textContent = `${price} ₽/ночь`;
   card.querySelector('.popup__type').textContent = TYPE_ACCOMMODATION_RUS[type];
-  card.querySelector('.popup__text--capacity').textContent = `${getDeclination(rooms, WORD_FORMS.room)} для ${getDeclination(guests, WORD_FORMS.guest)}`;
+  card.querySelector('.popup__text--capacity').textContent = `${getDeclination(rooms, WORD_FORMS.rooms)} для ${getDeclination(guests, WORD_FORMS.guests)}`;
   card.querySelector('.popup__text--time').textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
 
   if (description && description.length > 0) {
