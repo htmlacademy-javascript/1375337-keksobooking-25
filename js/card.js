@@ -65,19 +65,19 @@ const renderPopupAd = (ad) => {
   card.querySelector('.popup__text--capacity').textContent = `${getDeclination(rooms, WORD_FORMS.rooms)} для ${getDeclination(guests, WORD_FORMS.guests)}`;
   card.querySelector('.popup__text--time').textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
 
-  if (description && description.length > 0) {
+  if (description) {
     cardDescription.textContent = description;
   } else {
     cardDescription.remove();
   }
 
-  if (features && features.length > 0) {
+  if (features) {
     fillFeatures(featuresList, features);
   } else {
     featuresList.remove();
   }
 
-  if (photos && photos.length > 0) {
+  if (photos) {
     fillPhotos(photosList, photos);
   } else {
     photosList.remove();

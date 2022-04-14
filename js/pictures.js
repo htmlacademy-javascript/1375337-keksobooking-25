@@ -7,7 +7,8 @@ const adPhotoChooser = document.querySelector('.ad-form__upload input[type=file]
 const previewAdPhoto = document.querySelector('.ad-form__photo');
 
 
-avatarChooser.addEventListener('change', () => {
+avatarChooser.addEventListener('change', (evt) => {
+  evt.stopPropagation();
   const file = avatarChooser.files[0];
   const fileName = file.name.toLowerCase();
 
@@ -18,7 +19,8 @@ avatarChooser.addEventListener('change', () => {
   }
 });
 
-adPhotoChooser.addEventListener('change', () => {
+adPhotoChooser.addEventListener('change', (evt) => {
+  evt.stopPropagation();
   const file = adPhotoChooser.files[0];
   const fileName = file.name.toLowerCase();
 
@@ -36,7 +38,9 @@ adPhotoChooser.addEventListener('change', () => {
 
 const resetPictures = () => {
   previewAvatar.src = DEFAULT_AVATAR_IMAGE;
-  previewAdPhoto.firstChild.remove();
+  if (previewAdPhoto.firstChild) {
+    previewAdPhoto.firstChild.remove();
+  }
 };
 
 
