@@ -3,6 +3,18 @@ import {renderMarkers} from './map.js';
 
 const RENDER_PINS_AMOUNT = 10;
 
+const FILTER_TYPES = {
+  any: 'any',
+  middle: 'middle',
+  low: 'low',
+  high: 'high'
+};
+
+const RANGE_PRICE = {
+  low: 10000,
+  high: 50000,
+};
+
 const filters = document.querySelector('.map__filters');
 
 const typeFilter = filters.querySelector('#housing-type');
@@ -11,23 +23,18 @@ const guestsFilter = filters.querySelector('#housing-guests');
 const priceFilter = filters.querySelector('#housing-price');
 const featuresFilter = filters.querySelector('#housing-features');
 
-const RANGE_PRICE = {
-  low: 10000,
-  high: 50000,
-};
-
-const checkTypeValue = (ad) => typeFilter.value === 'any' || typeFilter.value === ad.offer.type;
-const checkRoomsValue = (ad) => roomsFilter.value === 'any' || roomsFilter.value === ad.offer.rooms.toString();
-const checkGuestsValue = (ad) => guestsFilter.value === 'any' || guestsFilter.value === ad.offer.guests.toString();
+const checkTypeValue = (ad) => typeFilter.value === FILTER_TYPES.any || typeFilter.value === ad.offer.type;
+const checkRoomsValue = (ad) => roomsFilter.value === FILTER_TYPES.any || roomsFilter.value === ad.offer.rooms.toString();
+const checkGuestsValue = (ad) => guestsFilter.value === FILTER_TYPES.any || guestsFilter.value === ad.offer.guests.toString();
 
 const checkPriceValue = (ad) => {
-  if (priceFilter.value === 'middle') {
+  if (priceFilter.value === FILTER_TYPES.middle) {
     return (ad.offer.price >= RANGE_PRICE.low && ad.offer.price <= RANGE_PRICE.high);
   }
-  else if (priceFilter.value === 'low') {
+  else if (priceFilter.value === FILTER_TYPES.low) {
     return (ad.offer.price  < RANGE_PRICE.low);
   }
-  else if (priceFilter.value === 'high') {
+  else if (priceFilter.value === FILTER_TYPES.high) {
     return  (ad.offer.price  > RANGE_PRICE.high);
   }
 
@@ -45,14 +52,21 @@ const checkFeaturesValue = ({ offer }) => {
 };
 
 const filterAds = (ads, setPins) => {
-  const filteredAds = ads
-    .filter((ad) => checkTypeValue(ad) &&
-        checkRoomsValue(ad) &&
-        checkGuestsValue(ad) &&
-        checkPriceValue(ad) &&
-        checkFeaturesValue(ad));
+  const filteredAds = [];
 
-  setPins(filteredAds.slice(0, RENDER_PINS_AMOUNT));
+  for (let i = 0; i < ads.length; i++) {
+    if (checkTypeValue(ads[i]) &&
+        checkRoomsValue(ads[i]) &&
+        checkGuestsValue(ads[i]) &&
+        checkPriceValue(ads[i]) &&
+        checkFeaturesValue(ads[i])&&
+        filteredAds.length <= RENDER_PINS_AMOUNT) {
+
+      filteredAds.push(ads[i]);
+    }
+  }
+
+  setPins(filteredAds);
 };
 
 const setFiltersListeners = (ads) => {
